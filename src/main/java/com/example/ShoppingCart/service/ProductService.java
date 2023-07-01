@@ -2,6 +2,7 @@ package com.example.ShoppingCart.service;
 
 import com.example.ShoppingCart.dto.ProductDTO;
 import com.example.ShoppingCart.model.Product;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.ShoppingCart.repository.ProductRepository;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class ProductService {
 
     private final ProductRepository productRepository;
@@ -20,10 +22,13 @@ public class ProductService {
     }
 
     public List<ProductDTO> getAllAvailableProducts() {
+        log.info("Получение списка доступных продуктов");
         List<Product> products = productRepository.findByInStockTrue();
-        return products.stream()
+        List<ProductDTO> productDTOs = products.stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
+        log.info("Получен список доступных продуктов: {}", productDTOs);
+        return productDTOs;
     }
 
     private ProductDTO mapToDTO(Product product) {
@@ -35,3 +40,4 @@ public class ProductService {
         return productDTO;
     }
 }
+

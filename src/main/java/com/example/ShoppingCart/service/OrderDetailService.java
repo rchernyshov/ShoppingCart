@@ -4,6 +4,7 @@ import com.example.ShoppingCart.dto.OrderDetailDTO;
 import com.example.ShoppingCart.model.Order;
 import com.example.ShoppingCart.model.OrderDetail;
 import com.example.ShoppingCart.model.Product;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import com.example.ShoppingCart.repository.OrderDetailRepository;
 
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class OrderDetailService {
     private final OrderDetailRepository orderDetailRepository;
 
@@ -19,6 +21,7 @@ public class OrderDetailService {
     }
 
     public OrderDetailDTO addOrderDetail(OrderDetailDTO orderDetailDTO) {
+        log.info("Добавление позиции заказа: {}", orderDetailDTO);
         // Преобразование OrderDetailDTO в сущность OrderDetail
         OrderDetail orderDetail = mapToEntity(orderDetailDTO);
 
@@ -26,24 +29,30 @@ public class OrderDetailService {
         OrderDetail savedOrderDetail = orderDetailRepository.save(orderDetail);
 
         // Преобразование сохраненной сущности в OrderDetailDTO и возврат
-        return mapToDTO(savedOrderDetail);
+        OrderDetailDTO savedOrderDetailDTO = mapToDTO(savedOrderDetail);
+        log.info("Позиция заказа успешно добавлена: {}", savedOrderDetailDTO);
+        return savedOrderDetailDTO;
     }
 
     public void deleteOrderDetail(Long orderDetailId) {
+        log.info("Удаление позиции заказа с идентификатором: {}", orderDetailId);
         // Удаление позиции заказа из базы данных по идентификатору
         orderDetailRepository.deleteById(orderDetailId);
+        log.info("Позиция заказа успешно удалена");
     }
 
     public List<OrderDetailDTO> getOrderDetailsByOrderId(Long orderId) {
-        // Получение всех позиций заказа по указанному orderId
+        log.info("Получение позиций заказа по идентификатору заказа: {}", orderId);
         List<OrderDetail> orderDetails = orderDetailRepository.findByOrder_Id(orderId);
 
         // Преобразование списка сущностей OrderDetail в список OrderDetailDTO
-        return orderDetails.stream()
+        List<OrderDetailDTO> orderDetailDTOs = orderDetails.stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
-    }
 
+        log.info("Получено {} позиций заказа", orderDetailDTOs.size());
+        return orderDetailDTOs;
+    }
 
     private OrderDetailDTO mapToDTO(OrderDetail orderDetail) {
         OrderDetailDTO orderDetailDTO = new OrderDetailDTO();
@@ -74,4 +83,5 @@ public class OrderDetailService {
         return orderDetail;
     }
 }
+
 
