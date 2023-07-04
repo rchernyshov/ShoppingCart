@@ -23,58 +23,57 @@ public class OrderService {
 
     public OrderDTO createOrder(OrderDTO orderDTO) {
         log.info("Создание заказа: {}", orderDTO);
-        // Логика создания заказа
         // Преобразование OrderDTO в сущность Order
         Order order = new Order();
-        // Установка значений из OrderDTO в Order
+
         order.setOrderDate(orderDTO.getOrderDate());
         order.setOrderStatus(orderDTO.getOrderStatus());
         order.setPaymentMethod(orderDTO.getPaymentMethod());
-        // Сохранение заказа в базе данных
-        order = orderRepository.save(order);
+
+        order = orderRepository.save(order); // Сохранение заказа в базе данных
+
         // Преобразование сущности Order в OrderDTO
         OrderDTO createdOrderDTO = new OrderDTO();
         createdOrderDTO.setId(order.getId());
         createdOrderDTO.setOrderDate(order.getOrderDate());
         createdOrderDTO.setOrderStatus(order.getOrderStatus());
         createdOrderDTO.setPaymentMethod(order.getPaymentMethod());
-        createdOrderDTO.setCustomerId(order.getCustomer().getId()); // Предположим, что у Order есть связь с Customer
+        createdOrderDTO.setCustomerId(order.getCustomer().getId());
         log.info("Заказ успешно создан: {}", createdOrderDTO);
         return createdOrderDTO;
     }
 
     public void deleteOrder(Long orderId) {
         log.info("Удаление заказа с идентификатором: {}", orderId);
-        // Логика удаления заказа
         orderRepository.deleteById(orderId);
         log.info("Заказ успешно удален");
     }
 
     public OrderDTO updateOrderStatus(Long orderId, OrderStatus newStatus) {
         log.info("Обновление статуса заказа. Идентификатор заказа: {}, Новый статус: {}", orderId, newStatus);
-        // Логика изменения статуса заказа
         Optional<Order> optionalOrder = orderRepository.findById(orderId);
         if (optionalOrder.isPresent()) {
             Order order = optionalOrder.get();
             order.setOrderStatus(newStatus);
             order = orderRepository.save(order);
+
             // Преобразование сущности Order в OrderDTO
             OrderDTO updatedOrderDTO = new OrderDTO();
             updatedOrderDTO.setId(order.getId());
             updatedOrderDTO.setOrderDate(order.getOrderDate());
             updatedOrderDTO.setOrderStatus(order.getOrderStatus());
             updatedOrderDTO.setPaymentMethod(order.getPaymentMethod());
-            updatedOrderDTO.setCustomerId(order.getCustomer().getId()); // Предположим, что у Order есть связь с Customer
+            updatedOrderDTO.setCustomerId(order.getCustomer().getId());
             log.info("Статус заказа успешно обновлен: {}", updatedOrderDTO);
             return updatedOrderDTO;
         } else {
-            throw new RuntimeException("Order not found with ID: " + orderId);
+            throw new RuntimeException("Заказ не найден с ID: " + orderId);
         }
     }
 
     public OrderDTO getOrderById(Long orderId) {
         log.info("Получение информации о заказе по идентификатору: {}", orderId);
-        // Логика получения информации о заказе по ID
+
         Optional<Order> optionalOrder = orderRepository.findById(orderId);
         if (optionalOrder.isPresent()) {
             Order order = optionalOrder.get();
@@ -84,7 +83,7 @@ public class OrderService {
             orderDTO.setOrderDate(order.getOrderDate());
             orderDTO.setOrderStatus(order.getOrderStatus());
             orderDTO.setPaymentMethod(order.getPaymentMethod());
-            orderDTO.setCustomerId(order.getCustomer().getId()); // Предположим, что у Order есть связь с Customer
+            orderDTO.setCustomerId(order.getCustomer().getId());
             log.info("Информация о заказе успешно получена: {}", orderDTO);
             return orderDTO;
         } else {

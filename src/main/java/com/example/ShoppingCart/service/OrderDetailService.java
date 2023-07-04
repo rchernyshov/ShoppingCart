@@ -22,21 +22,19 @@ public class OrderDetailService {
 
     public OrderDetailDTO addOrderDetail(OrderDetailDTO orderDetailDTO) {
         log.info("Добавление позиции заказа: {}", orderDetailDTO);
-        // Преобразование OrderDetailDTO в сущность OrderDetail
-        OrderDetail orderDetail = mapToEntity(orderDetailDTO);
+        OrderDetail orderDetail = mapToEntity(orderDetailDTO);  //Преобразование OrderDetailDTO в сущность OrderDetail
 
-        // Сохранение позиции заказа в базе данных
-        OrderDetail savedOrderDetail = orderDetailRepository.save(orderDetail);
 
-        // Преобразование сохраненной сущности в OrderDetailDTO и возврат
-        OrderDetailDTO savedOrderDetailDTO = mapToDTO(savedOrderDetail);
+        OrderDetail savedOrderDetail = orderDetailRepository.save(orderDetail); //Сохранение позиции заказа в базе данных
+
+
+        OrderDetailDTO savedOrderDetailDTO = mapToDTO(savedOrderDetail);  //Преобразование сохраненной сущности в OrderDetailDTO
         log.info("Позиция заказа успешно добавлена: {}", savedOrderDetailDTO);
         return savedOrderDetailDTO;
     }
 
     public void deleteOrderDetail(Long orderDetailId) {
         log.info("Удаление позиции заказа с идентификатором: {}", orderDetailId);
-        // Удаление позиции заказа из базы данных по идентификатору
         orderDetailRepository.deleteById(orderDetailId);
         log.info("Позиция заказа успешно удалена");
     }
@@ -45,7 +43,7 @@ public class OrderDetailService {
         log.info("Получение позиций заказа по идентификатору заказа: {}", orderId);
         List<OrderDetail> orderDetails = orderDetailRepository.findByOrder_Id(orderId);
 
-        // Преобразование списка сущностей OrderDetail в список OrderDetailDTO
+        //Преобразование списка сущностей OrderDetail в список OrderDetailDTO
         List<OrderDetailDTO> orderDetailDTOs = orderDetails.stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
@@ -58,8 +56,8 @@ public class OrderDetailService {
         OrderDetailDTO orderDetailDTO = new OrderDetailDTO();
         // Преобразование полей сущности в поля DTO
         orderDetailDTO.setId(orderDetail.getId());
-        orderDetailDTO.setOrderId(orderDetail.getOrder().getId()); // Получение идентификатора заказа
-        orderDetailDTO.setProductId(orderDetail.getProduct().getId()); // Получение идентификатора продукта
+        orderDetailDTO.setOrderId(orderDetail.getOrder().getId());
+        orderDetailDTO.setProductId(orderDetail.getProduct().getId());
         orderDetailDTO.setPrice(orderDetail.getPrice());
         orderDetailDTO.setQuantity(orderDetail.getQuantity());
         return orderDetailDTO;

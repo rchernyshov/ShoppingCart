@@ -10,7 +10,7 @@ import com.example.ShoppingCart.service.OrderService;
 
 @RestController
 @RequestMapping("/orders")
-@Slf4j // Аннотация для создания логгера с помощью Lombok
+@Slf4j
 public class OrderController {
     private final OrderService orderService; // Зависимость от сервиса заказов
 
