@@ -3,6 +3,8 @@ package com.example.ShoppingCart.dto;
 import com.example.ShoppingCart.model.OrderStatus;
 import com.example.ShoppingCart.model.PaymentMethod;
 import lombok.Data;
+
+import java.math.BigDecimal;
 import java.time.LocalDate;
 @Data
 public class OrderDTO {
@@ -12,3 +14,4 @@ public class OrderDTO {
     private PaymentMethod paymentMethod;
     private Long customerId;
 }
+
