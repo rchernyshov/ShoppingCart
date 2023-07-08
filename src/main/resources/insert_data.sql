@@ -1,4 +1,3 @@
--- Наполнение таблицы "customer"
 INSERT INTO customer (names, surname, address, email, phone)
 VALUES
   ('Иван', 'Иванов', 'ул. Главная 1', 'ivan@gmail.com', '89254351256'),
@@ -12,7 +11,6 @@ VALUES
   ('Сергей', 'Ковалев', 'пр. Советский 12', 'sergei@gmail.com', '89746661244'),
   ('Мария', 'Федорова', 'ул. Лесная 7', 'maria@gmail.com', '89310120485');
 
--- Наполнение таблицы "orders"
 INSERT INTO orders (order_date, order_status, payment_method, customer_id)
 VALUES
   ('2023-07-01', 'CREATED', 'CREDIT_CARD', 1),
@@ -26,7 +24,6 @@ VALUES
   ('2023-07-09', 'CREATED', 'CREDIT_CARD', 9),
   ('2023-07-10', 'SHIPPED', 'PAY_PAL', 10);
 
--- Наполнение таблицы "product"
 INSERT INTO product (name, price, description, in_stock)
 VALUES
   ('Молоко', 60, 'Молоко пастеризованное, 2.5% жирности', true),
@@ -41,7 +38,6 @@ VALUES
   ('Кофе', 250, 'Кофе молотый, 250 г', true);
 
 
--- Наполнение таблицы "orderDetail"
 INSERT INTO orderDetail (order_id, product_id, price, quantity)
 VALUES
   (1, 1, 120, 2),
