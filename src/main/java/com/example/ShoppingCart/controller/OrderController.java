@@ -34,13 +34,23 @@ public class OrderController {
         return ResponseEntity.noContent().build();
     }
 
+//    @PutMapping("/{orderId}/status")
+//    public ResponseEntity<OrderDTO> updateOrderStatus(@PathVariable Long orderId, @RequestBody OrderStatus newStatus) {
+//        log.info("Обновление статуса заказа с ID {}: Новый статус - {}", orderId, newStatus);
+//        OrderDTO updatedOrder = orderService.updateOrderStatus(orderId, newStatus);
+//        log.info("Статус заказа с ID {} обновлен: {}", orderId, updatedOrder);
+//        return ResponseEntity.ok(updatedOrder);
+//    }
+
     @PutMapping("/{orderId}/status")
-    public ResponseEntity<OrderDTO> updateOrderStatus(@PathVariable Long orderId, @RequestBody OrderStatus newStatus) {
+    public ResponseEntity<OrderDTO> updateOrderStatus(@PathVariable Long orderId, @RequestBody String newStatus) {
         log.info("Обновление статуса заказа с ID {}: Новый статус - {}", orderId, newStatus);
-        OrderDTO updatedOrder = orderService.updateOrderStatus(orderId, newStatus);
+        OrderStatus status = OrderStatus.valueOf(newStatus);
+        OrderDTO updatedOrder = orderService.updateOrderStatus(orderId, status);
         log.info("Статус заказа с ID {} обновлен: {}", orderId, updatedOrder);
         return ResponseEntity.ok(updatedOrder);
     }
+
 
     @GetMapping("/{orderId}")
     public ResponseEntity<OrderDTO> getOrderById(@PathVariable Long orderId) {

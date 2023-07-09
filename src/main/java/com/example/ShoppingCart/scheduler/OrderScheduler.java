@@ -22,25 +22,21 @@ import java.util.stream.Collectors;
 public class OrderScheduler {
     private final OrderService orderService;
     private final OrderDetailService orderDetailService;
+    @Value("${order.threshold.amount}")
     private double thresholdAmount;
-    private Environment environment;
 
     public OrderScheduler(OrderService orderService, OrderDetailService orderDetailService, Environment environment) {
         this.orderService = orderService;
         this.orderDetailService = orderDetailService;
-        this.environment = environment;
     }
 
-    @PostConstruct
-    public void setThresholdAmount() {
-        this.thresholdAmount = Double.parseDouble(environment.getProperty("order.threshold.amount"));
-    }
 
     @Scheduled(cron = "${order.scheduler.cron}")
     public void processDailyOrders() {
+        log.info("Запущен планировщик processDailyOrders");
+
         LocalDate yesterday = LocalDate.now().minusDays(1);
         List<OrderDTO> orders = orderService.getOrdersByDate(yesterday);
-
         BigDecimal totalAmount = BigDecimal.ZERO;
 
         for (OrderDTO order : orders) {
@@ -50,6 +46,8 @@ public class OrderScheduler {
                 totalAmount = totalAmount.add(detailAmount);
             }
         }
+
+        log.info("Общая сумма заказов за последний день: {}", totalAmount);
 
         if (totalAmount.compareTo(BigDecimal.valueOf(thresholdAmount)) > 0) {
             log.info("Заказы за последний день с общей суммой, превышающей {}: {}", thresholdAmount, orders);
